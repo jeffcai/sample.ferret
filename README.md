@@ -3,6 +3,22 @@ Ferret [![Build Status](https://travis-ci.org/WASdev/sample.ferret.svg?branch=ma
 
 This sample project contains a simple Servlet application called Ferret. Ferret listens for HTTP requests sent to `<host>:<port>/ferret[/*]`, and responds with information about the request and the server.
 
+## To deploy on Kubernetes
+
+```
+git clone https://github.com/jeffcai/sample.ferret
+cd sample.ferret
+// package the war 打包
+mvn war:war
+// build and push the image, and modify the tag first 准备和推送镜像，注意修改 tag
+docker build -t us.icr.io/wasliberty-test/sample-ferret:1.0 .
+docker push us.icr.io/wasliberty-test/sample-ferret:1.0
+// deploy, at first the mofidy the deployment yaml to use your tagged image 部署，注意修改文件 kubernetes /sample-deploy-svc.yaml 里面的 image
+kubectl apply -f ./kubernetes
+// access the application withe url below, at fist you need get the service nodeport. 访问应用，注意先运行 kubectl get svc 找到相应 service 的 nodeport，用下面的 URL 访问
+http://<node-ip>:<node-port>/ferret/
+```
+
 ## Running in Eclipse
 
 ### Maven

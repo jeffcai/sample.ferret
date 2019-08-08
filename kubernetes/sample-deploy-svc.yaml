@@ -1,0 +1,32 @@
+apiVersion: v1
+kind: Service
+metadata:
+  name: sample-ferret
+  labels:
+    app: sample-ferret
+spec:
+  type: NodePort
+  ports:
+    - port: 9080
+  selector:
+    app: sample-ferret
+---
+apiVersion: apps/v1beta2
+kind: Deployment
+metadata:
+  name: sample-ferret
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: sample-ferret
+  template:
+    metadata:
+      labels:
+        app: sample-ferret
+    spec:
+      containers:
+      - name: sample-ferret
+        image: us.icr.io/wasliberty-test/sample-ferret:1.0
+        ports:
+        - containerPort: 9080
